@@ -30,8 +30,7 @@ async def main():
     async for message in client.iter_messages(group_id):
         for participant in participants_data:
             if(participant['id'] == message.from_id):
-                count = participant['count'] + 1
-                participant['count'] = count 
+                participant['count'] = participant['count'] + 1 
     
     participants_sorted = sorted(participants_data, key=itemgetter('count'), reverse=True)  
     print(str(participants_sorted))
