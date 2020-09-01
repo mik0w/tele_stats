@@ -1,10 +1,5 @@
 # tele_stats
-Users' activity stats from Telegram group chat, using telethon
-
-## usage
-
-
-Telestats is a tool for getting stats from Telegram chats with Telegram-oriented OSINT features.
+**tele_stats** is a tool for getting stats from Telegram chats with Telegram-oriented OSINT features.
     
 ## Usage
 Before you run the script itself, you have to fill up the config file:
@@ -24,13 +19,15 @@ group_id = -123456789
 
 Create the Python 3 virtual environment: `python3 -m venv venv` and activate it:
 `source venv/bin/activate`.
+
 Next, install requirements with `pip install -r requirements.txt`
 
 After these steps Telestats should be working.
 
-You can run it in the following way: 
+You can **run it** in the following way: 
 `python3 tele_stats.py [ACTION] [PARAMETERS]`
-If you run tele_stats.py as `python tele_stats.py`, you will use an CLI-mode, basically with the same commands as the ones listed below:
+
+If you run tele_stats.py as `python tele_stats.py`, you will enter an CLI-mode, basically with the same commands as the ones listed below:
 
 For now, you can use the following commands (todo: most of them not implemented so far):
   * `get_group_id [group_name]` - gets the unique id of telegram group
