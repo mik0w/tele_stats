@@ -1,65 +1,9 @@
-import telethon
-import configparser
-from telethon import TelegramClient
-from operator import itemgetter
 from pyfiglet import Figlet
 from clint.textui import colored, indent, puts
 from aioconsole import ainput
+from group_tools import GroupTools
+from config import Config
 import sys
-
-
-class Config:
-
-    def __init__(self, config_path):
-
-        self.username, self.api_id, self.api_hash, self.group_id = self.read_config(config_path)
-        self.client = TelegramClient(self.username, int(self.api_id), str(self.api_hash))
-
-    def read_config(self, config_path):
-
-        config = configparser.ConfigParser()
-        config.read(config_path)
-
-        api_id = config['Telegram']['api_id']
-        api_hash = config['Telegram']['api_hash']
-        username = config['Telegram']['username']
-        if config['Telegram']['group_id']:
-            group_id = int(config['Telegram']['group_id'])
-        else:
-            group_id = None
-        return username, api_id, api_hash, group_id
-
-
-class GroupTools:
-
-    def __init__(self, client, **kwargs):
-        self.client = client
-        self.group_id = kwargs.get('group_id', None)
-
-    async def list_all_users(self):
-        participants_data = []
-
-        all_participants = await self.client.get_participants(self.group_id, aggressive=True)
-        for participant in all_participants:
-            participant = {"id": participant.id,
-                           "first_name": participant.first_name,
-                           "last_name": participant.last_name,
-                           "count": 0}
-            participants_data.append(participant)
-        return participants_data
-
-    async def count_user_stats(self):
-        participants_data = await self.list_all_users()
-        async for message in client.iter_messages(self.group_id):
-            for participant in participants_data:
-                if participant['id'] == message.from_id:
-                    participant['count'] += 1
-        participants_sorted = sorted(participants_data, key=itemgetter('count'), reverse=True)
-        return participants_sorted
-
-    async def get_messages_with_content(self, content):
-        # TODO
-        pass
 
 
 class ChatTools:
@@ -68,8 +12,9 @@ class ChatTools:
 
 
 class IntTools:
-    # TODO
-    pass
+
+    def find_groups_of_user(self):
+        pass
 
 
 class CLI:
@@ -91,20 +36,19 @@ class CLI:
             self.get_help()
         else:
             pass
-            # for word in command:
-            #     print(str(word))
         return command
 
-    async def arg_command(self):
+    async def arg_command(self, **kwargs):
 
         if sys.argv[1] == 'list_users':
             if (sys.argv[2] == '-i') | (sys.argv[2] == '--id'):
 
                 group_id = int(sys.argv[3])
                 group_tools = GroupTools(self.client, group_id=group_id)
-                all_users_dict = await group_tools.list_all_users()
+                participants_data = [p async for p in group_tools.list_all_users()]
+
                 puts(colored.blue('Users of group: ' + str(group_id)))
-                for user in all_users_dict:
+                for user in participants_data:
                     print(str(user))
 
             elif (sys.argv[2] == '-n') | (sys.argv[2] == '--name'):
@@ -119,7 +63,25 @@ class CLI:
             pass
         elif sys.argv[1] == 'get_all_group_ids':
             pass
-        elif sys.argv[1] == 'count_user_stats':
+        elif sys.argv[1] == 'count_messages':
+
+            if (sys.argv[2] == '-i') | (sys.argv[2] == '--id'):
+
+                group_id = int(sys.argv[3])
+                group_tools = GroupTools(self.client, group_id=group_id)
+                puts(colored.yellow('Counting messages... It may take a while.'))
+                participants_data = await group_tools.count_messages()
+
+                puts(colored.blue('Users activity (from the highest) in group: ' + str(group_id)))
+                for user in participants_data:
+                    print(str(user))
+
+            elif (sys.argv[2] == '-n') | (sys.argv[2] == '--name'):
+                # TODO listing users basing on the group name
+                print(sys.argv[2])
+            else:
+                print('Option: ' + sys.argv[2] + ' not recognized.')
+                self.get_help()
             pass
         else:
             print('Command: ' + str(sys.argv) + ' not recognized. Please use -h or --help to check options.')
