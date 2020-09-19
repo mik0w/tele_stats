@@ -25,16 +25,10 @@ Next, install requirements with `pip install -r requirements.txt`
 After these steps Telestats should be working.
 
 You can **run it** in the following way: 
-`python3 tele_stats.py [ACTION] [PARAMETERS]`
-
-If you run tele_stats.py as `python tele_stats.py`, you will enter an CLI-mode, basically with the same commands as the ones listed below:
+`python3 tele_stats.py [ACTION] [PARAMETER(S)]`
 
 For now, you can use the following commands (todo: most of them not implemented so far):
-  * `get_group_id [group_name]` - gets the unique id of telegram group
-  * `get_all_group_ids` - gets all of the group ids from your chat history
-  * `list_users -i [group_id]` - list all users from the given group (basing on group id)
-  * `count_user_stats -i [group_id]` - count how many messages have been sent by all of the users of the given group (basing on group id) -> WARNING: way too slow for groups with > 100000 messages
-  * `list_users -n [group_name]` - list all users from the given group (basing on group name)
-  * `count_user_stats -n [group_name]` - count how many messages have been sent by all of the users of the given group (basing on group name) -> WARNING: way too slow for groups with > 100000 messages
+  * `-c|--count_messages [group_id]` - count how many messages have been sent by all of the users of the given group (basing on group id) -> WARNING: might get slow.
+  * `-l|--list_users [group_id]` - list all users from the given group (basing on group id)
 
 That's very WIP project so far.

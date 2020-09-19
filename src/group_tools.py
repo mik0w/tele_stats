@@ -8,15 +8,20 @@ class GroupTools:
         self.group_id = kwargs.get('group_id', None)
 
     async def list_all_users(self):
-        for participant in await self.client.get_participants(self.group_id, aggressive=True):
-            participant = {"id": participant.id,
-                           "first_name": participant.first_name,
-                           "last_name": participant.last_name,
-                           "count": 0}
-            yield participant
+        try:
+            for participant in await self.client.get_participants(self.group_id, aggressive=True):
+                participant = {"id": participant.id,
+                               "first_name": participant.first_name,
+                               "last_name": participant.last_name}
+                yield participant
+        except ValueError:
+            error = "Could not find the group with the given ID."
+            yield error
 
     async def count_messages(self):
         participants_data = [p async for p in self.list_all_users()]
+        for participant in participants_data:
+            participant['count'] = 0
         async for message in self.client.iter_messages(self.group_id):
             for participant in participants_data:
                 if participant['id'] == message.from_id:
