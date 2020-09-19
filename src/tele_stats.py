@@ -57,11 +57,8 @@ class CLI:
         if args.get_group_id:
             group_name = str(args.value)
             group_tools = GroupTools(self.client)
-            x = 0
             g = await group_tools.get_group_entity(group_name)
             print(g)
-            x = x+1
-            print(x)
 
 
 config = Config("../config.ini")
