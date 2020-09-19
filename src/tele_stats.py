@@ -33,10 +33,14 @@ class CLI:
                             action="store_true")
         parser.add_argument("-l", "--list_users", help="show all users in the group with the given [id]",
                             action="store_true")
-        parser.add_argument("id", type=int, help="id of the group")
+        parser.add_argument("-g", "--get_group_id", help="get id of the group with name [name]",
+                            action="store_true")
+        # parser.add_argument("id", type=int, help="id of the group", nargs='?', default=None)
+        parser.add_argument("value", type=str, help="[group_id|group_name]")
         args = parser.parse_args()
+
         if args.count_messages:
-            group_id = args.id
+            group_id = int(args.value)
             group_tools = GroupTools(self.client, group_id=group_id)
             puts(colored.yellow('Counting messages... It may take a while.'))
             participants_data = await group_tools.count_messages()
@@ -46,11 +50,18 @@ class CLI:
                 print(str(user))
 
         if args.list_users:
-            group_id = args.id
+            group_id = int(args.value)
             group_tools = GroupTools(self.client, group_id=group_id)
             async for p in group_tools.list_all_users():
                 print(str(p))
-
+        if args.get_group_id:
+            group_name = str(args.value)
+            group_tools = GroupTools(self.client)
+            x = 0
+            g = await group_tools.get_group_entity(group_name)
+            print(g)
+            x = x+1
+            print(x)
 
 
 config = Config("../config.ini")

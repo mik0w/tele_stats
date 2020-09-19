@@ -3,16 +3,22 @@ from operator import itemgetter
 
 class GroupTools:
 
-    def __init__(self, client, **kwargs):
+    def __init__(self, client, group_id=None):
         self.client = client
-        self.group_id = kwargs.get('group_id', None)
+        if group_id:
+            self.group_id = group_id
+
+    async def get_group_entity(self, group_name):
+        group_entity = await self.client.get_entity(str(group_name))
+        return group_entity
 
     async def list_all_users(self):
         try:
             for participant in await self.client.get_participants(self.group_id, aggressive=True):
                 participant = {"id": participant.id,
                                "first_name": participant.first_name,
-                               "last_name": participant.last_name}
+                               "last_name": participant.last_name,
+                               "phone_number": participant.phone}
                 yield participant
         except ValueError:
             error = "Could not find the group with the given ID."
