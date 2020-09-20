@@ -30,5 +30,6 @@ You can **run it** in the following way:
 For now, you can use the following commands (todo: most of them not implemented so far):
   * `-c|--count_messages [group_id]` - count how many messages have been sent by all of the users of the given group (basing on group id) -> WARNING: might get slow.
   * `-l|--list_users [group_id]` - list all users from the given group (basing on group id)
+  * `-g|--get_group_id [group_name|group_title]` - returns id of the given group (basing on group name or title)
 
 That's very WIP project so far.
