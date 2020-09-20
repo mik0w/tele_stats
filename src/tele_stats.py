@@ -5,6 +5,8 @@ from group_tools import GroupTools
 from config import Config
 import sys
 import argparse
+import pprint
+
 
 class ChatTools:
     # TODO
@@ -28,6 +30,7 @@ class CLI:
         print(f.renderText('telestats'))
 
     async def arg_command(self):
+
         parser = argparse.ArgumentParser()
         parser.add_argument("-c", "--count_messages", help="count messages  in the group with the given [id]",
                             action="store_true")
@@ -35,7 +38,6 @@ class CLI:
                             action="store_true")
         parser.add_argument("-g", "--get_group_id", help="get id of the group with name [name]",
                             action="store_true")
-        # parser.add_argument("id", type=int, help="id of the group", nargs='?', default=None)
         parser.add_argument("value", type=str, help="[group_id|group_name]")
         args = parser.parse_args()
 
@@ -54,11 +56,15 @@ class CLI:
             group_tools = GroupTools(self.client, group_id=group_id)
             async for p in group_tools.list_all_users():
                 print(str(p))
+
         if args.get_group_id:
             group_name = str(args.value)
             group_tools = GroupTools(self.client)
             g = await group_tools.get_group_entity(group_name)
-            print(g)
+            group_info = {"id": g.id,
+                           "group_username": g.username,
+                           "group_title": g.title}
+            pprint.pprint(group_info)
 
 
 config = Config("../config.ini")

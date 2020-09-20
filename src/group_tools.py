@@ -1,4 +1,5 @@
 from operator import itemgetter
+from telethon.tl.types import PeerChannel
 
 
 class GroupTools:
